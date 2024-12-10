@@ -11,10 +11,15 @@ window.onload = function () {
     canvasEl.width = GameViewport.WIDTH;
     canvasEl.height = GameViewport.HEIGHT;
 
-    const [ryu, background] = document.querySelectorAll('img');
+    const [ryu, ken, background] = document.querySelectorAll('img');
 
-    const position = {
+    const ryuPosition = {
         x: GameViewport.WIDTH / 2 - ryu.width / 2,
+        y: GameViewport.HEIGHT - 600, // Adjust based on canvas height
+    };
+
+    const kenPosition = {
+        x: GameViewport.WIDTH / 4 - ken.width / 2,
         y: GameViewport.HEIGHT - 600, // Adjust based on canvas height
     };
 
@@ -28,16 +33,24 @@ window.onload = function () {
         canvasEl.width = GameViewport.WIDTH;
         canvasEl.height = GameViewport.HEIGHT;
 
-        // Update position to stay proportional
-        position.x = GameViewport.WIDTH / 2 - ryu.width / 2;
-        position.y = GameViewport.HEIGHT - 10;
+        // Update positions to stay proportional
+        ryuPosition.x = GameViewport.WIDTH / 2 - ryu.width / 2;
+        kenPosition.x = GameViewport.WIDTH / 4 - ken.width / 2;
+        ryuPosition.y = GameViewport.HEIGHT - 600;
+        kenPosition.y = GameViewport.HEIGHT - 600;
     };
 
     function frame() {
-        position.x += velocity;
+        // Move Ryu and Ken
+        ryuPosition.x += velocity;
+        kenPosition.x -= velocity;
 
-        // Reverse direction if it hits canvas boundaries
-        if (position.x > GameViewport.WIDTH - ryu.width || position.x < 0) {
+        // Reverse direction if they hit canvas boundaries
+        if (ryuPosition.x > GameViewport.WIDTH - ryu.width || ryuPosition.x < 0) {
+            velocity = -velocity;
+        }
+
+        if (kenPosition.x > GameViewport.WIDTH - ken.width || kenPosition.x < 0) {
             velocity = -velocity;
         }
 
@@ -47,17 +60,9 @@ window.onload = function () {
         // Draw the background scaled to the entire canvas
         context.drawImage(background, 0, 0, GameViewport.WIDTH, GameViewport.HEIGHT);
 
-        // Optional: Draw yellow cross lines for debugging
-        context.strokeStyle = 'dark';
-        context.beginPath();
-        context.moveTo(0, 0);
-        context.lineTo(GameViewport.WIDTH, GameViewport.HEIGHT);
-        context.moveTo(GameViewport.WIDTH, 0);
-        context.lineTo(0, GameViewport.HEIGHT);
-        context.stroke();
-
-        // Draw the Ryu image at its updated position
-        context.drawImage(ryu, position.x, position.y);
+        // Draw the Ryu and Ken images at their updated positions
+        context.drawImage(ryu, ryuPosition.x, ryuPosition.y);
+        context.drawImage(ken, kenPosition.x, kenPosition.y);
 
         // Request the next animation frame
         window.requestAnimationFrame(frame);
