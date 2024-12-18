@@ -1,15 +1,15 @@
 class Fighter {
     constructor(name,x,y,velocity) {
-        this.name;
-        this.image;
-        this.position;
-        this.velocity
+        this.name = name;
+        this.image = new Image();
+        this.position = {x,y};
+        this.velocity - velocity;
     }
     update(context){
         this.position.x += velocity;
 
-        if (position.x > context.canvas.width - KeyboardEvent.width || position.x < 0) {
-            velocity = +velocity;
+        if (position.x > context.canvas.width - this.image.width || position.x < 0) {
+            this.velocity = -this.velocity;
         }
     }
     draw(context) {
